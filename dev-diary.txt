@@ -1,0 +1,38 @@
+reading https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html
+
+author seems a bit crotchety
+
+tuples are mutable, makes sense in the context of this being js but good to keep in mind
+
+    "Function syntax includes parameter names. This is pretty hard to get used to!
+        let fst: (a: any, b: any) => any = (a, b) => a;
+        // or more precisely:
+        let fst: <T, U>(a: T, b: U) => T = (a, b) => a;"
+
+    "Note that inference will work in any order, but intellisense will only work left-to-right, so TypeScript prefers to declare map with the array first:
+        declare function map<T, U>(ts: T[], f: (t: T) => U): U[];"
+
+    const prevents reassignment
+    readonly prevents a property from being reassigned
+
+    ReadonlyArray<T>, neat
+
+https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
+    less verbose
+
+https://www.typescriptlang.org/docs/handbook/2/basic-types.html
+
+    "one of TypeScript’s core values: much of the time, you will know better than TypeScript."
+        ????????
+
+    --noEmitOnError
+        good
+
+    always use lowercase string, number, boolean as opposed to eg String, Number
+
+    number[] is an array of numbers
+
+    interfaces are extensible, type aliases are not
+
+ok i made it as far as https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
+and think i'm just gonna take a quick break and do aoc 2023 day 1
