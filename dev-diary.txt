@@ -1,3 +1,6 @@
+https://www.saaspegasus.com/guides/modern-javascript-for-django-developers/integrating-javascript-pipeline/
+    this was handy
+
 reading https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html
 
 author seems a bit crotchety
@@ -36,3 +39,29 @@ https://www.typescriptlang.org/docs/handbook/2/basic-types.html
 
 ok i made it as far as https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
 and think i'm just gonna take a quick break and do aoc 2023 day 1
+
+ok ez cool
+back to https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
+
+    so "type assertions" are "as Foo"
+    assertion is a weird name for them bc there is no runtime behavior
+    instead i'd call them casts
+
+    https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-inference
+
+    this one's funky
+    as "GET" or as const
+    weird
+
+    ! is dangerous, claims the value is non-null but with no extra runtime checking
+
+cool
+https://www.typescriptlang.org/docs/handbook/2/narrowing.html
+
+    typeof checks are "type guards"
+
+    https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions
+
+        nice i like this
+
+ok i was working on part 2 but i have to go
