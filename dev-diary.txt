@@ -65,3 +65,41 @@ https://www.typescriptlang.org/docs/handbook/2/narrowing.html
         nice i like this
 
 ok i was working on part 2 but i have to go
+
+ok interesting
+
+
+  const digitWords = {
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9",
+  };
+
+  const lines = rawLines.map((line) =>
+    line.replace(
+      /one|two|three|four|five|six|seven|eight|nine/g,
+      (match) => digitWords[match],
+    )
+  );
+
+that was complaining on this line
+      (match) => digitWords[match],
+
+bc `match` is a string, and string can't be used to index digitWords
+
+so i was like, what can i do here
+
+i tried doing digitWords[match as keyof digitWords],
+
+but that didn't work bc digitWords is an object, not a type
+but this works:
+      (match) => digitWords[match as keyof typeof digitWords],
+
+keyof typeof
+neat!
