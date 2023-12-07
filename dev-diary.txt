@@ -103,3 +103,37 @@ but this works:
 
 keyof typeof
 neat!
+
+ok so back to part 2
+my solution isn't working
+i think it's because for lines like this
+
+eightwothree
+
+they want you to turn it into 823
+instead of 8wo3
+
+hm
+well maybe not
+for instance my input has this line
+
+1four2eightseven8one3eightwogrr
+
+the eight doesn't matter
+just the two
+
+so i think what we want to do is
+do two passes over each line
+replace the first found worded digit from the left
+and the first found one from the right
+
+don't care about the middle
+
+TODO how do i debug typescript in deno?
+
+ok i guess that doesn't work
+
+there must be a line somewhere that's like
+zzzeightwozzz
+
+oh well
