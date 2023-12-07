@@ -56,4 +56,29 @@ function partOne(): number {
   return validGames.reduce((acc, game) => acc + game.id, 0);
 }
 
+function maximumCubesSeenPerColor(rounds: Round[]): Round {
+  let [red, green, blue] = [0, 0, 0];
+  rounds.forEach((round) => {
+    red = Math.max(red, round.red);
+    green = Math.max(green, round.green);
+    blue = Math.max(blue, round.blue);
+  });
+
+  return { red, green, blue };
+}
+
+function partTwo() {
+  const input = parseInput();
+
+  // "The power of a set of cubes is equal to the numbers of red, green, and blue cubes multiplied together."
+  const powers = input.map((game) => {
+    const maxes = maximumCubesSeenPerColor(game.rounds);
+    return maxes.red * maxes.blue * maxes.green;
+  });
+
+  // "For each game, find the minimum set of cubes that must have been present. What is the sum of the power of these sets?"
+  return powers.reduce((acc, value) => value + acc);
+}
+
 console.log(partOne());
+console.log(partTwo());

@@ -172,3 +172,21 @@ good advice about avoiding overuse of generics:
 ok, was about to start https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads
 
 but let's do day 2 now
+
+ok part 1 ez
+
+back to docs
+overloads are gross, don't do them
+
+unknown is interesting
+
+https://www.typescriptlang.org/docs/handbook/2/functions.html#parameter-destructuring this is good
+
+ok cool done with fn page
+next up i have these two tabs open
+https://code.visualstudio.com/docs/typescript/typescript-tutorial
+https://code.visualstudio.com/docs/languages/typescript
+which one should i do? both?
+the second one looks like a longer version of the first one
+
+ok whatever i did the second one and it had no new info, nbd
