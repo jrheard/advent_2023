@@ -1,5 +1,5 @@
 function partOne(): number {
-  const text: string = Deno.readTextFileSync("inputs/day_1.txt");
+  const text = Deno.readTextFileSync("inputs/day_1.txt");
   const lines = text.split("\n");
   const digits = lines.map((line) =>
     line.split("").filter((char) => char >= "0" && char <= "9")

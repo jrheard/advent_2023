@@ -137,3 +137,38 @@ there must be a line somewhere that's like
 zzzeightwozzz
 
 oh well
+
+ok done
+
+so now let's figure out how to run+debug TS with deno + vscode
+
+https://docs.deno.com/runtime/manual/references/vscode_deno#using-the-debugger
+
+ok cool that works great
+i'll have to tweak launch.json to target each new file i'm working on
+but that seems ok
+
+ok now let's read more typescript docs
+
+https://www.typescriptlang.org/docs/handbook/2/functions.html
+
+https://www.typescriptlang.org/docs/handbook/2/functions.html#call-signatures
+
+GROSS
+JESUS
+
+this is interesting
+https://www.typescriptlang.org/docs/handbook/2/functions.html#specifying-type-arguments
+    const arr = combine<string | number>([1, 2, 3], ["hello"]);
+
+neat
+
+good advice about avoiding overuse of generics:
+
+    Remember, type parameters are for relating the types of multiple values. If a
+    type parameter is only used once in the function signature, it’s not relating
+    anything.
+
+ok, was about to start https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads
+
+but let's do day 2 now
