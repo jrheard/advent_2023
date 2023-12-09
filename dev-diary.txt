@@ -190,3 +190,25 @@ which one should i do? both?
 the second one looks like a longer version of the first one
 
 ok whatever i did the second one and it had no new info, nbd
+
+ok day 2 part 2 done
+tomorrow let's pick up again with https://www.typescriptlang.org/docs/handbook/2/objects.html
+
+ok actually first let's do day 3
+
+ok it's a grid with neighbors again
+
+wow ok so typescript doesn't seem to have a range(5, 10) function
+instead you have to do like
+    console.log([...Array(5).keys()])
+to do range (0, 5)
+and i'm not sure yet how to do range (5, 10)
+
+so anyway i'm trying to like
+come up with a list of the coordinates of all symbols in this grid
+and trying to start off by doing it in a functional way w map and stuff
+
+i should be able to do this super easy w a couple forloops but i want to figure out how to do it this other way
+so where do i start?
+
+TODO rewrite grid stuff w class syntax?
