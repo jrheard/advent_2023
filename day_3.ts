@@ -42,6 +42,57 @@ class Grid {
   }
 }
 
+interface Number {
+  value: number;
+  coordinates: number[][];
+}
+
+function findNumbersInLine(line: string, y: number, grid: Grid): Number[] {
+  const result = [];
+
+  let currentlyParsingNumber = false;
+  let currentNumber = "";
+  let currentNumberCoordinates = [];
+  for (const x of range(0, line.length)) {
+    const value = grid.valueAt(x, y);
+
+    if (isDigit(value) && currentlyParsingNumber) {
+      currentNumberCoordinates.push([x, y]);
+      currentNumber += value;
+    } else if (isDigit(value) && !currentlyParsingNumber) {
+      currentlyParsingNumber = true;
+      currentNumberCoordinates.push([x, y]);
+      currentNumber = value;
+    } else if (!isDigit(value) && currentlyParsingNumber) {
+      result.push({
+        value: parseInt(currentNumber),
+        coordinates: currentNumberCoordinates,
+      });
+      currentlyParsingNumber = false;
+      currentNumber = "";
+      currentNumberCoordinates = [];
+    }
+  }
+
+  if (currentlyParsingNumber) {
+    result.push({
+      value: parseInt(currentNumber),
+      coordinates: currentNumberCoordinates,
+    });
+  }
+
+  return result;
+}
+
+// TODO change this to return a dict of {[x, y]: Number}
+// oh my god will that actually work or not? js does comparisons by reference not value, right?? TODO TODO
+function findNumbersInGrid(grid: Grid): Number[] {
+  // TODO why do i have to do Array.from() here?
+  return Array.from(grid.data.entries()).flatMap(([y, line]) =>
+    findNumbersInLine(line, y, grid)
+  );
+}
+
 function loadGrid(): Grid {
   const text = Deno.readTextFileSync("inputs/day_3.txt");
   return new Grid(text);

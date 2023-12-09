@@ -212,3 +212,33 @@ i should be able to do this super easy w a couple forloops but i want to figure 
 so where do i start?
 
 DONE rewrite grid stuff w class syntax?
+
+ok wow
+day 3 is interesting
+because you're not summing digits, you're summing NUMBERS
+
+so like for instance in this sample input
+    467..114..
+    ...*......
+    ..35..633.
+    ......#...
+    617*......
+    .....+.58.
+    ..592.....
+    ......755.
+    ...$.*....
+    .664.598..
+
+you're supposed to be summing numbers like eg 467, 35, 633
+
+so i still think my overall approach (find coordinates of digits, then find coordinates of numbers next to them) is reasonable
+but i need to represent and look up numbers with a bit more ceremony
+i think a number could look like
+
+interface Number {
+    value: number,
+    coordinates: number[][]
+}
+
+i guess you could store them in a dict of {coordinates: number}
+this all seems doable
