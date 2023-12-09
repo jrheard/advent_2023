@@ -211,4 +211,4 @@ and trying to start off by doing it in a functional way w map and stuff
 i should be able to do this super easy w a couple forloops but i want to figure out how to do it this other way
 so where do i start?
 
-TODO rewrite grid stuff w class syntax?
+DONE rewrite grid stuff w class syntax?
