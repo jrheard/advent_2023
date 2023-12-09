@@ -1,21 +1,23 @@
-interface Grid {
+class Grid {
   data: string[];
   width: number;
   height: number;
+
+  constructor(text: string) {
+    const data = text.split("\n");
+    this.data = data;
+    this.width = data[0].length;
+    this.height = data.length;
+  }
+
+  valueAt(x: number, y: number): string {
+    return this.data[y][x];
+  }
 }
 
 function loadGrid(): Grid {
   const text = Deno.readTextFileSync("inputs/day_3.txt");
-  const data = text.split("\n");
-  return {
-    data,
-    width: data[0].length,
-    height: data.length,
-  };
-}
-
-function valueAt(grid: Grid, x: number, y: number): string {
-  return grid.data[y][x];
+  return new Grid(text);
 }
 
 function partOne(): number {
@@ -24,8 +26,8 @@ function partOne(): number {
   const symbolCoordinates = [...Array(grid.width * grid.height).keys()].map(
     (i) => [i % grid.width, Math.floor(i / grid.height)],
   ).filter(([x, y]) =>
-    !(valueAt(grid, x, y) >= "0" && valueAt(grid, x, y) <= "9") &&
-    valueAt(grid, x, y) != "."
+    !(grid.valueAt(x, y) >= "0" && grid.valueAt(x, y) <= "9") &&
+    grid.valueAt(x, y) != "."
   );
 
   console.log(symbolCoordinates);
