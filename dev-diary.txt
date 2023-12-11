@@ -282,3 +282,18 @@ https://www.typescriptlang.org/docs/handbook/2/objects.html
     interesting notes about how to use generics in the context of type aliases
     eg
         type OrNull<Type> = Type | null;
+
+ok cool that was a useful page
+gonna take a look at day 4 part 2 before leaving for the day
+
+ok this is interesting
+the fact that this "winning copies" behavior is directional - i.e. you only win stuff further down the list - is useful
+ensures that this is bounded / can't have cycles
+
+so we need to track the number of copies of each card that you have
+either by putting .copies on Card itself,
+or by having eg a tuple of [Card, number] with some good name
+
+and you start off with 1 copy of each card
+
+let's try just putting .copies on Card for now
