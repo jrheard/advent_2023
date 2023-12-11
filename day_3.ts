@@ -10,9 +10,11 @@ function isSymbol(char: string): boolean {
   return !isDigit(char) && char != ".";
 }
 
-function coordinateToString(coord: readonly number[]): string {
-  return `${coord[0]},${coord[1]}`;
+function coordinateToString([x, y]: Coordinates): string {
+  return `${x},${y}`;
 }
+
+type Coordinates = readonly [number, number];
 
 class Grid {
   data: string[];
@@ -30,8 +32,8 @@ class Grid {
     return this.data[y][x];
   }
 
-  neighborCoordinates(x: number, y: number): number[][] {
-    const result = [];
+  neighborCoordinates(x: number, y: number): readonly Coordinates[] {
+    const result: Coordinates[] = [];
     for (const xx of range(x - 1, x + 2)) {
       for (const yy of range(y - 1, y + 2)) {
         if (
@@ -48,15 +50,19 @@ class Grid {
 
 interface Number {
   value: number;
-  coordinates: readonly number[][];
+  coordinates: readonly Coordinates[];
 }
 
-function findNumbersInLine(line: string, y: number, grid: Grid): Number[] {
+function findNumbersInLine(
+  line: string,
+  y: number,
+  grid: Grid,
+): readonly Number[] {
   const result = [];
 
   let currentlyParsingNumber = false;
   let currentNumber = "";
-  let currentNumberCoordinates = [];
+  let currentNumberCoordinates: Coordinates[] = [];
   for (const x of range(0, line.length)) {
     const value = grid.valueAt(x, y);
 
