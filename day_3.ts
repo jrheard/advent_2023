@@ -1,5 +1,5 @@
 // via https://stackoverflow.com/questions/36947847/how-to-generate-range-of-numbers-from-0-to-n-in-es2015-only
-const range = (start: number, end: number): number[] =>
+const range = (start: number, end: number): readonly number[] =>
   Array.from({ length: (end - start) }, (_v, k) => k + start);
 
 function isDigit(char: string): boolean {
@@ -10,7 +10,7 @@ function isSymbol(char: string): boolean {
   return !isDigit(char) && char != ".";
 }
 
-function coordinateToString(coord: number[]): string {
+function coordinateToString(coord: readonly number[]): string {
   return `${coord[0]},${coord[1]}`;
 }
 
@@ -48,7 +48,7 @@ class Grid {
 
 interface Number {
   value: number;
-  coordinates: number[][];
+  coordinates: readonly number[][];
 }
 
 function findNumbersInLine(line: string, y: number, grid: Grid): Number[] {
@@ -89,7 +89,6 @@ function findNumbersInLine(line: string, y: number, grid: Grid): Number[] {
 }
 
 function findNumbersInGrid(grid: Grid): Map<string, Number> {
-  // TODO why do i have to do Array.from() here?
   const numbers = Array.from(grid.data.entries()).flatMap(([y, line]) =>
     findNumbersInLine(line, y, grid)
   );

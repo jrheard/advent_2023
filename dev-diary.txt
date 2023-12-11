@@ -129,7 +129,7 @@ and the first found one from the right
 
 don't care about the middle
 
-TODO how do i debug typescript in deno?
+DONE how do i debug typescript in deno?
 
 ok i guess that doesn't work
 
@@ -244,11 +244,41 @@ i guess you could store them in a dict of {coordinates: number}
 this all seems doable
 
 ok cool so i made some progress
-TODO next up is to turn Number[] into a map of {[x, y]: Number}
-but TODO the main thing i'm worried about here is - can you use an array as a map key in javascript?
+DONE next up is to turn Number[] into a map of {[x, y]: Number}
+but DONE the main thing i'm worried about here is - can you use an array as a map key in javascript?
 js does comparison by reference, not equality, right? so shouldn't that cause key lookups to always fail?
 we'll see next time!
 
 ok yeah so that is true, if you do [1, 2, 3] as your map key you can't look it up again later
 but you can use string keys like "1,2,3" instead
 lol
+
+ok finished day 3
+day 4 part 1 was ez
+
+let's go back to reading docs a bit
+
+https://www.typescriptlang.org/docs/handbook/2/objects.html
+
+    good notes here about destructuring syntax
+
+    interesting note about readonly properties
+    readonly just prevents reassignment, not mutation
+    still potentially a useful signal to developers though? meh
+
+    index signatures are interesting - i wouldn't want to use them often but i can see it being helpful in typing some js code
+    and also maybe in, like, dealing with representing user input / some not-well-known api responses / etc
+
+    oh i see, it's an INDEX signature
+    so it describes what happens if you do eg foo[1]
+
+    bleh in general i think i'd avoid this feature
+
+    excess property checks seem useful
+
+    hm at one point they say that the difference between extending and intersecting types is mainly around how
+    each approach handles conflicts - but i don't think they actually say what each approach does in the presence of conflicts???
+
+    interesting notes about how to use generics in the context of type aliases
+    eg
+        type OrNull<Type> = Type | null;

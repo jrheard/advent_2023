@@ -5,7 +5,7 @@ interface Card {
   actualNumbers: number[];
 }
 
-function loadInput(): Card[] {
+function loadInput(): readonly Card[] {
   const lines = Deno.readTextFileSync("inputs/day_4.txt").split("\n");
   return lines.map((line) => {
     const content = line.substring(line.indexOf(":") + 2);
