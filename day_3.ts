@@ -32,8 +32,8 @@ class Grid {
 
   neighborCoordinates(x: number, y: number): number[][] {
     const result = [];
-    for (const xx of range(x - 1, x + 1)) {
-      for (const yy of range(y - 1, y + 1)) {
+    for (const xx of range(x - 1, x + 2)) {
+      for (const yy of range(y - 1, y + 2)) {
         if (
           xx >= 0 && xx < this.width && yy >= 0 && yy < this.height &&
           !(xx == x && yy == y)
@@ -122,7 +122,6 @@ function partOne(): number {
   );
 
   const numbersByCoordinate = findNumbersInGrid(grid);
-  console.log(numbersByCoordinate);
 
   const partNumbers = new Set<Number>();
   for (const coord of potentialPartNumberCoordinates) {
@@ -130,8 +129,6 @@ function partOne(): number {
       partNumbers.add(numbersByCoordinate.get(coordinateToString(coord))!);
     }
   }
-
-  console.log(partNumbers);
 
   return Array.from(partNumbers).reduce((acc, num) => acc + num.value, 0);
 }
