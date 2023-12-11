@@ -242,3 +242,13 @@ interface Number {
 
 i guess you could store them in a dict of {coordinates: number}
 this all seems doable
+
+ok cool so i made some progress
+TODO next up is to turn Number[] into a map of {[x, y]: Number}
+but TODO the main thing i'm worried about here is - can you use an array as a map key in javascript?
+js does comparison by reference, not equality, right? so shouldn't that cause key lookups to always fail?
+we'll see next time!
+
+ok yeah so that is true, if you do [1, 2, 3] as your map key you can't look it up again later
+but you can use string keys like "1,2,3" instead
+lol

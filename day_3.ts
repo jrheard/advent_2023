@@ -10,6 +10,10 @@ function isSymbol(char: string): boolean {
   return !isDigit(char) && char != ".";
 }
 
+function coordinateToString(coord: number[]): string {
+  return `${coord[0]},${coord[1]}`;
+}
+
 class Grid {
   data: string[];
   width: number;
@@ -84,13 +88,20 @@ function findNumbersInLine(line: string, y: number, grid: Grid): Number[] {
   return result;
 }
 
-// TODO change this to return a dict of {[x, y]: Number}
-// oh my god will that actually work or not? js does comparisons by reference not value, right?? TODO TODO
-function findNumbersInGrid(grid: Grid): Number[] {
+function findNumbersInGrid(grid: Grid): Map<string, Number> {
   // TODO why do i have to do Array.from() here?
-  return Array.from(grid.data.entries()).flatMap(([y, line]) =>
+  const numbers = Array.from(grid.data.entries()).flatMap(([y, line]) =>
     findNumbersInLine(line, y, grid)
   );
+
+  const result = new Map();
+  for (const num of numbers) {
+    for (const coord of num.coordinates) {
+      result.set(coordinateToString(coord), num);
+    }
+  }
+
+  return result;
 }
 
 function loadGrid(): Grid {
@@ -110,11 +121,19 @@ function partOne(): number {
     symbolCoordinates.flatMap(([x, y]) => grid.neighborCoordinates(x, y)),
   );
 
-  // XXXX this doesn't work, because "number" in this problem means "contiguous set of digits", not individual digits
-  // XXX TODO
-  return Array.from(potentialPartNumberCoordinates).filter(([x, y]) =>
-    isDigit(grid.valueAt(x, y))
-  ).reduce((acc, [x, y]) => acc + parseInt(grid.valueAt(x, y)), 0);
+  const numbersByCoordinate = findNumbersInGrid(grid);
+  console.log(numbersByCoordinate);
+
+  const partNumbers = new Set<Number>();
+  for (const coord of potentialPartNumberCoordinates) {
+    if (numbersByCoordinate.has(coordinateToString(coord))) {
+      partNumbers.add(numbersByCoordinate.get(coordinateToString(coord))!);
+    }
+  }
+
+  console.log(partNumbers);
+
+  return Array.from(partNumbers).reduce((acc, num) => acc + num.value, 0);
 }
 
 console.log(partOne());
