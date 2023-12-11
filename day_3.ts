@@ -133,4 +133,35 @@ function partOne(): number {
   return Array.from(partNumbers).reduce((acc, num) => acc + num.value, 0);
 }
 
+function partTwo(): number {
+  const grid = loadGrid();
+
+  const numbersByCoordinate = findNumbersInGrid(grid);
+
+  const gearCoordinates = [...Array(grid.width * grid.height).keys()].map(
+    (i) => [i % grid.width, Math.floor(i / grid.height)],
+  ).filter(([x, y]) => grid.valueAt(x, y) == "*");
+
+  let result = 0;
+
+  for (const [x, y] of gearCoordinates) {
+    const partNumbers = new Set<Number>();
+    for (const coord of grid.neighborCoordinates(x, y)) {
+      if (numbersByCoordinate.has(coordinateToString(coord))) {
+        partNumbers.add(numbersByCoordinate.get(coordinateToString(coord))!);
+      }
+    }
+
+    if (partNumbers.size == 2) {
+      result += Array.from(partNumbers).reduce(
+        (acc, num) => acc * num.value,
+        1,
+      );
+    }
+  }
+
+  return result;
+}
+
 console.log(partOne());
+console.log(partTwo());
