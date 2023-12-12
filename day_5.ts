@@ -1,5 +1,4 @@
-const parseInts = (numberStrings: readonly string[]) =>
-  numberStrings.map((x) => parseInt(x, 10));
+import { parseInts } from "./util.ts";
 
 interface MapRange {
   sourceRangeStart: number;

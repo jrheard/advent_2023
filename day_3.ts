@@ -1,6 +1,4 @@
-// via https://stackoverflow.com/questions/36947847/how-to-generate-range-of-numbers-from-0-to-n-in-es2015-only
-const range = (start: number, end: number): readonly number[] =>
-  Array.from({ length: (end - start) }, (_v, k) => k + start);
+import { range } from "./util.ts";
 
 function isDigit(char: string): boolean {
   return char >= "0" && char <= "9";

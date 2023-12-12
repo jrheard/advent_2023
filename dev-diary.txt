@@ -340,3 +340,42 @@ or discover that the number isn't covered by a range
 ok yeah my part 2 gave the right answer
 
 well i guess i could take this opportunity to learn how to profile typescript when running it from the command line via deno
+
+hm
+https://docs.deno.com/runtime/manual/references/contributing/profiling exists but seems mainly about how to profile deno itself
+
+i think i'd be better off figuring out how to run this in chrome and use their profiling tab
+
+ok so i just made an index.html like this
+
+    <html>
+    <head><script src="day_5.js"></script></head>
+    <body><button onclick="console.log(partTwo())">hi</button></body>
+    </html>
+
+and used tsc to compile the ts to js
+it seems like 98.6% of the time is spent in partTwo(), in the forloops
+and relatively little is spent in seedToLocation
+which is interesting
+
+i don't really understand why that's the case
+
+ok whatever
+i looked at reddit and i have no idea what people are talking about when they talk about their optimized solutions
+just do not understand what they are saying
+so i think day 5 is done and that's fine!!
+
+let's read some docs
+
+https://www.typescriptlang.org/docs/handbook/2/types-from-types.html
+https://www.typescriptlang.org/docs/handbook/2/generics.html
+https://www.typescriptlang.org/docs/handbook/2/keyof-types.html
+https://www.typescriptlang.org/docs/handbook/2/typeof-types.html
+https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html
+https://www.typescriptlang.org/docs/handbook/2/conditional-types.html
+    neat
+https://www.typescriptlang.org/docs/handbook/2/mapped-types.html
+    also neat
+https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html
+    actually pretty cool, re: detecting typos in eg "firstNameChanged"
+    pretty neat!
