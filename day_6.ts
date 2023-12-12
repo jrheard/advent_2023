@@ -1,4 +1,4 @@
-import { parseInts, range } from "./util.ts";
+import { parseInts } from "./util.ts";
 
 interface Input {
   times: readonly number[];

@@ -379,3 +379,17 @@ https://www.typescriptlang.org/docs/handbook/2/mapped-types.html
 https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html
     actually pretty cool, re: detecting typos in eg "firstNameChanged"
     pretty neat!
+
+ok let's do day 6
+and after that i'll read https://www.typescriptlang.org/docs/handbook/2/classes.html
+
+ok day 6 done
+started a util.js file via https://examples.deno.land/import-export
+
+skimmed the classes page
+let's look at day 7
+
+ok
+so i think what i want to do is write a compareHands(a, b) function
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
