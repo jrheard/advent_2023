@@ -38,7 +38,10 @@ function parseMapRangesFromInput(
   rangeTitle: string,
 ): readonly MapRange[] {
   const startIndex = input.indexOf(rangeTitle) + 1;
-  const endIndex = input.slice(startIndex).indexOf("");
+  let endIndex = input.slice(startIndex).indexOf("");
+  if (endIndex == -1) {
+    endIndex = input.length - startIndex;
+  }
   return input.slice(startIndex, startIndex + endIndex).map(parseMapRange);
 }
 

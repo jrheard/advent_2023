@@ -301,3 +301,25 @@ let's try just putting .copies on Card for now
 ok ezpz
 
 day 5 now
+
+ok, part 1 implementation first pass done
+but getting wrong answer
+it says my answer is too low
+why?
+
+works fine on their example input
+i don't feel like i have an off-by-one somewhere bc
+
+    console.log(mapId(97, input.seedToSoil));
+    console.log(mapId(98, input.seedToSoil));
+    console.log(mapId(99, input.seedToSoil));
+    console.log(mapId(100, input.seedToSoil));
+
+    99
+    50
+    51
+    100
+
+so where could the issue be?
+gotta examine the puzzle input i guess
+
