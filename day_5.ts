@@ -4,7 +4,7 @@ const parseInts = (numberStrings: readonly string[]) =>
 interface MapRange {
   sourceRangeStart: number;
   destinationRangeStart: number;
-  rangeLength: number;
+  length: number;
 }
 
 interface PuzzleInput {
@@ -20,7 +20,7 @@ interface PuzzleInput {
 
 // Takes a string like "50 98 2", returns a MapRange.
 function parseMapRange(line: string): MapRange {
-  const [destinationRangeStart, sourceRangeStart, rangeLength] = parseInts(
+  const [destinationRangeStart, sourceRangeStart, length] = parseInts(
     line.split(
       " ",
     ),
@@ -29,7 +29,7 @@ function parseMapRange(line: string): MapRange {
   return {
     destinationRangeStart,
     sourceRangeStart,
-    rangeLength,
+    length,
   };
 }
 
@@ -70,10 +70,32 @@ function parseInput(): PuzzleInput {
   };
 }
 
+function mapId(id: number, ranges: readonly MapRange[]): number {
+  for (const range of ranges) {
+    if (
+      id >= range.sourceRangeStart && id < range.sourceRangeStart + range.length
+    ) {
+      return range.destinationRangeStart + id - range.sourceRangeStart;
+    }
+  }
+
+  return id;
+}
+
 function partOne(): number {
   const input = parseInput();
-  console.log(input);
-  return -1;
+
+  const locations = input.seeds.map((seed) => {
+    const soil = mapId(seed, input.seedToSoil);
+    const fertilizer = mapId(soil, input.soilToFertilizer);
+    const water = mapId(fertilizer, input.fertilizerToWater);
+    const light = mapId(water, input.waterToLight);
+    const temperature = mapId(light, input.lightToTemperature);
+    const humidity = mapId(temperature, input.temperatureToHumidity);
+    return mapId(humidity, input.humidityToLocation);
+  });
+
+  return Math.min(...locations);
 }
 
 console.log(partOne());
