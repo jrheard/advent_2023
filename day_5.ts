@@ -85,20 +85,36 @@ function mapId(id: number, ranges: readonly MapRange[]): number {
   return id;
 }
 
+function seedToLocation(seed: number, input: PuzzleInput): number {
+  const soil = mapId(seed, input.seedToSoil);
+  const fertilizer = mapId(soil, input.soilToFertilizer);
+  const water = mapId(fertilizer, input.fertilizerToWater);
+  const light = mapId(water, input.waterToLight);
+  const temperature = mapId(light, input.lightToTemperature);
+  const humidity = mapId(temperature, input.temperatureToHumidity);
+  return mapId(humidity, input.humidityToLocation);
+}
+
 function partOne(): number {
   const input = parseInput();
-
-  const locations = input.seeds.map((seed) => {
-    const soil = mapId(seed, input.seedToSoil);
-    const fertilizer = mapId(soil, input.soilToFertilizer);
-    const water = mapId(fertilizer, input.fertilizerToWater);
-    const light = mapId(water, input.waterToLight);
-    const temperature = mapId(light, input.lightToTemperature);
-    const humidity = mapId(temperature, input.temperatureToHumidity);
-    return mapId(humidity, input.humidityToLocation);
-  });
-
+  const locations = input.seeds.map((seed) => seedToLocation(seed, input));
   return Math.min(...locations);
 }
 
+function partTwo(): number {
+  const input = parseInput();
+
+  let result = Number.MAX_SAFE_INTEGER;
+
+  for (let i = 0; i < input.seeds.length; i += 2) {
+    const [start, length] = input.seeds.slice(i, i + 2);
+
+    for (let j = start; j < start + length; j++) {
+      result = Math.min(result, seedToLocation(j, input));
+    }
+  }
+
+  return result;
+}
 console.log(partOne());
+console.log(partTwo());

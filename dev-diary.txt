@@ -323,3 +323,20 @@ i don't feel like i have an off-by-one somewhere bc
 so where could the issue be?
 gotta examine the puzzle input i guess
 
+ok nah that wasn't it
+i just had a mistake when parsing the end of the input
+and wasn't parsing the humidity-to-location ranges at all
+whoops!
+
+ok so now i have a first pass of part 2 running
+it's running, but very slowly
+i'm inclined to just say that's fine
+
+what would i do if i wanted to optimize it?
+first i'd want to profile it i guess
+but i imagine most of the time i spent walking each list of ranges to either find the right range
+or discover that the number isn't covered by a range
+
+ok yeah my part 2 gave the right answer
+
+well i guess i could take this opportunity to learn how to profile typescript when running it from the command line via deno
