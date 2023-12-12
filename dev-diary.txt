@@ -297,3 +297,7 @@ or by having eg a tuple of [Card, number] with some good name
 and you start off with 1 copy of each card
 
 let's try just putting .copies on Card for now
+
+ok ezpz
+
+day 5 now
