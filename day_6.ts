@@ -15,9 +15,13 @@ function parseInput(): Input {
 }
 
 function numWaysToWin(time: number, distanceToBeat: number): number {
-  return range(0, time + 1).map((durationToHoldButton) =>
-    (time - durationToHoldButton) * durationToHoldButton
-  ).filter((distanceTraveled) => distanceTraveled > distanceToBeat).length;
+  let result = 0;
+  for (let i = 0; i <= time; i++) {
+    if ((time - i) * i > distanceToBeat) {
+      result += 1;
+    }
+  }
+  return result;
 }
 
 function partOne(): number {
@@ -26,4 +30,17 @@ function partOne(): number {
     .reduce((acc, num) => acc * num, 1);
 }
 
+function partTwo(): number {
+  const lines = Deno.readTextFileSync("inputs/day_6.txt").split("\n");
+  const time = parseInt(
+    lines[0].substring(5).trim().split(/\s+/).reduce((acc, x) => acc + x),
+  );
+  const distance = parseInt(
+    lines[1].substring(9).trim().split(/\s+/).reduce((acc, x) => acc + x),
+  );
+
+  return numWaysToWin(time, distance);
+}
+
 console.log(partOne());
+console.log(partTwo());
