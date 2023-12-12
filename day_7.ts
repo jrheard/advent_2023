@@ -22,7 +22,9 @@ const handTypeOrder = [
   "two pair",
   "one pair",
   "high card",
-];
+] as const;
+
+type HandType = (typeof handTypeOrder)[number];
 
 interface HandAndBid {
   hand: string;
@@ -40,8 +42,7 @@ function parseInput(): HandAndBid[] {
   });
 }
 
-// TODO can i have a HandType enum/union type?
-function getHandType(hand: string): string {
+function getHandType(hand: string): HandType {
   const counts: { [card: string]: number } = {};
   for (const card of hand) {
     counts[card] = counts[card] ? counts[card] + 1 : 1;
@@ -49,7 +50,7 @@ function getHandType(hand: string): string {
 
   const values = Object.values(counts);
 
-  // I want to use pattern matching, switch/case, etc, but can't compare against arrays like [5], [2, 3], etc,
+  // I want to use a switch/case, but can't compare against arrays like [5], [2, 3], etc,
   // because javascript does equality checking by reference instead of value.
   if (values.includes(5)) {
     return "five of a kind";

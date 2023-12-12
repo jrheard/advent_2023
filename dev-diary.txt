@@ -393,3 +393,34 @@ ok
 so i think what i want to do is write a compareHands(a, b) function
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+
+cool cool
+day7 part 1 done
+trying to figure out how to have a nice type that's a union of string literals
+
+https://stackoverflow.com/questions/44480644/string-union-to-string-array
+
+ok that's pretty cool
+
+    const handTypeOrder = [
+    "five of a kind",
+    "four of a kind",
+    "full house",
+    "three of a kind",
+    "two pair",
+    "one pair",
+    "high card",
+    ] as const;
+    type HandType = (typeof handTypeOrder)[number];
+
+cool neat!
+ok so now i think maybe i'll have some fun and play around with a pattern matching lib
+https://github.com/gvergnaud/ts-pattern
+
+hwo do i use this in deno?
+
+ok so importing it is really easy
+
+    import { match, P } from "npm:ts-pattern@5.0.6";
+
+but it doesn't actually make my code any better, it was fine the way it was
