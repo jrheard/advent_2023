@@ -138,7 +138,7 @@ function partOne(): number {
 function partTwo(): number {
   const input = parseInput();
   const sortedHands = input.toSorted((a, b) =>
-    compareHands(a.hand, b.hand, false)
+    compareHands(a.hand, b.hand, true)
   );
 
   return sortedHands.map((handAndBid, i) => handAndBid.bid * (i + 1))
@@ -149,3 +149,4 @@ function partTwo(): number {
 }
 
 console.log(partOne());
+console.log(partTwo());
