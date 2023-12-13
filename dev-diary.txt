@@ -474,3 +474,52 @@ whoops!
 ok fixed
 
 let's take a look at day 8
+
+day 8 part 1 was ez
+day 8 part 2 brute force takes a long time
+
+first idea that comes to mind:
+
+for each start node,
+compute the distance until it gets to a Z node
+and then compute the least common multiple of each of those numbers
+
+what i'm concerned about though is that - each start node doesn't necessarily just end up at a single Z node
+it could end up at several
+and so, like, which numbers am i finding the LCM of?
+
+if start node 1 arrives at Z nodes after distance [5, 7, 23]
+and start node 2 arrives at Z nodes after distance [11, 15, 20, 25]
+and etc, for six start nodes
+
+then like
+am i computing all of the possible permutations of distances per start node, like [
+    [5, 11, ...],
+    [5, 15, ...],
+    ...
+    [7, 11, ...],
+    [7, 15, ...],
+]
+
+and finding the LCM of each, and THEN finding the smallest one of those?
+i guess that would work
+
+when i google lcm in typescript, goog gen ai response gives
+
+    function lcm(a: number, b: number): number {
+    // Find the greatest common divisor (GCD) of the two numbers
+    const gcd = (a, b) => {
+        if (b === 0) {
+        return a;
+        }
+        return gcd(b, a % b);
+    };
+
+    // The LCM is the product of the two numbers divided by the GCD
+    return (a * b) / gcd(a, b);
+    }
+
+god i guess today could be the day i experiment with github copilot
+hm it's $10/month with a 30 day free trial
+
+not super interested, i'm here to learn typescript

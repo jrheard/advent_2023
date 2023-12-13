@@ -39,4 +39,32 @@ function partOne(): number {
   return walkPath(input);
 }
 
+function walkPathForGhosts(input: Input): number {
+  let currentNodes = Object.keys(input.network).filter((k) => k.at(-1) == "A");
+  let distance = 0;
+
+  while (!currentNodes.every((node) => node.at(-1) == "Z")) {
+    if (distance % 10000 == 0) {
+      console.log(distance);
+    }
+
+    const direction = input.directions[distance % input.directions.length];
+
+    currentNodes = currentNodes.map((node) => {
+      const [left, right] = input.network[node];
+      return direction == "L" ? left : right;
+    });
+
+    distance++;
+  }
+
+  return distance;
+}
+
+function partTwo(): number {
+  const input = parseInput();
+  return walkPathForGhosts(input);
+}
+
 console.log(partOne());
+console.log(partTwo());
