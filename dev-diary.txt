@@ -523,3 +523,12 @@ god i guess today could be the day i experiment with github copilot
 hm it's $10/month with a 30 day free trial
 
 not super interested, i'm here to learn typescript
+
+oh hm
+so each start node seems to arrive at its end node on a loop
+
+    [ "LCA", "NVA", "GCA", "SXA", "AAA", "GMA" ]
+    [ [ 11567 ], [ 19637 ], [ 15871 ], [ 21251 ], [ 12643 ], [ 19099 ] ]
+
+cool so this is easier then
+
