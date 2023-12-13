@@ -14,6 +14,22 @@ const cardOrder = [
   "2",
 ];
 
+const cardOrderJokersWild = [
+  "A",
+  "K",
+  "Q",
+  "T",
+  "9",
+  "8",
+  "7",
+  "6",
+  "5",
+  "4",
+  "3",
+  "2",
+  "J",
+];
+
 const handTypeOrder = [
   "five of a kind",
   "four of a kind",
@@ -42,13 +58,24 @@ function parseInput(): HandAndBid[] {
   });
 }
 
-function getHandType(hand: string): HandType {
+function getHandType(hand: string, jokersWild: boolean): HandType {
   const counts: { [card: string]: number } = {};
   for (const card of hand) {
     counts[card] = counts[card] ? counts[card] + 1 : 1;
   }
 
-  const values = Object.values(counts);
+  let values = [];
+  if (jokersWild) {
+    const jokers = counts.J ?? 0;
+    delete counts.J;
+
+    values = Object.values(counts);
+
+    const indexOfMax = values.indexOf(Math.max(...values));
+    values[indexOfMax] += jokers;
+  } else {
+    values = Object.values(counts);
+  }
 
   // I want to use a switch/case, but can't compare against arrays like [5], [2, 3], etc,
   // because javascript does equality checking by reference instead of value.
@@ -69,9 +96,9 @@ function getHandType(hand: string): HandType {
   }
 }
 
-function compareHands(a: string, b: string): number {
-  const aRank = handTypeOrder.indexOf(getHandType(a));
-  const bRank = handTypeOrder.indexOf(getHandType(b));
+function compareHands(a: string, b: string, jokersWild: boolean): number {
+  const aRank = handTypeOrder.indexOf(getHandType(a, jokersWild));
+  const bRank = handTypeOrder.indexOf(getHandType(b, jokersWild));
 
   if (aRank < bRank) {
     return 1;
@@ -79,8 +106,10 @@ function compareHands(a: string, b: string): number {
     return -1;
   } else {
     for (let i = 0; i < a.length; i++) {
-      const aCardRank = cardOrder.indexOf(a[i]);
-      const bCardRank = cardOrder.indexOf(b[i]);
+      const order = jokersWild ? cardOrderJokersWild : cardOrder;
+
+      const aCardRank = order.indexOf(a[i]);
+      const bCardRank = order.indexOf(b[i]);
 
       if (aCardRank < bCardRank) {
         return 1;
@@ -95,7 +124,22 @@ function compareHands(a: string, b: string): number {
 
 function partOne(): number {
   const input = parseInput();
-  const sortedHands = input.toSorted((a, b) => compareHands(a.hand, b.hand));
+  const sortedHands = input.toSorted((a, b) =>
+    compareHands(a.hand, b.hand, false)
+  );
+
+  return sortedHands.map((handAndBid, i) => handAndBid.bid * (i + 1))
+    .reduce((
+      acc,
+      val,
+    ) => acc + val);
+}
+
+function partTwo(): number {
+  const input = parseInput();
+  const sortedHands = input.toSorted((a, b) =>
+    compareHands(a.hand, b.hand, false)
+  );
 
   return sortedHands.map((handAndBid, i) => handAndBid.bid * (i + 1))
     .reduce((
