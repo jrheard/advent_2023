@@ -424,3 +424,43 @@ ok so importing it is really easy
     import { match, P } from "npm:ts-pattern@5.0.6";
 
 but it doesn't actually make my code any better, it was fine the way it was
+
+ok, so working on day 7 part 2
+i have something running, it passes on the sample input but fails on the real input
+
+so this is the order of hand types
+
+    const handTypeOrder = [
+    "five of a kind",
+    "four of a kind",
+    "full house",
+    "three of a kind",
+    "two pair",
+    "one pair",
+    "high card",
+    ] as const;
+
+and the prompt says jokers should "be whatever card is best for the purpose of determining hand type"
+i wonder if there are eg situations where i'm making a three of a kind when i could be making a full house
+what's an example of that?
+
+1233J -> will become three of a kind
+1133J -> will become full house no matter which i pick
+113JJ -> will become four of a kind, which is better
+
+so no, i can't think of a specific edge case around three of a kind vs full house
+
+how about one pair vs two pair?
+1123J -> three of a kind
+1234J -> one pair
+123JJ -> three of a kind
+
+nope
+
+hm
+wonder what i'm missing
+my current answer is 252219277, too high
+
+hm
+tried using the approach in https://github.com/mgtezak/Advent_of_Code/blob/master/2023/Day_07.py#L52
+now my answer is 252210321 , still too high

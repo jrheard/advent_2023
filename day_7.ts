@@ -65,31 +65,27 @@ function getHandType(hand: string, jokersWild: boolean): HandType {
   }
 
   let values = [];
+  let jokers = 0;
   if (jokersWild) {
-    const jokers = counts.J ?? 0;
+    jokers = counts.J ?? 0;
     delete counts.J;
-
-    values = Object.values(counts);
-
-    const indexOfMax = values.indexOf(Math.max(...values));
-    values[indexOfMax] += jokers;
-  } else {
-    values = Object.values(counts);
   }
+
+  values = Object.values(counts).toSorted().toReversed();
 
   // I want to use a switch/case, but can't compare against arrays like [5], [2, 3], etc,
   // because javascript does equality checking by reference instead of value.
-  if (values.includes(5)) {
+  if (values[0] + jokers == 5) {
     return "five of a kind";
-  } else if (values.includes(4)) {
+  } else if (values[0] + jokers == 4) {
     return "four of a kind";
-  } else if (values.includes(3) && values.includes(2)) {
+  } else if (values[0] + jokers == 3 && values[1] == 2) {
     return "full house";
-  } else if (values.includes(3)) {
+  } else if (values[0] + jokers == 3) {
     return "three of a kind";
-  } else if (values.filter((x) => x == 2).length == 2) {
+  } else if (values[0] == 2 && (jokers || values[1] == 2)) {
     return "two pair";
-  } else if (values.includes(2)) {
+  } else if (values[0] == 2 || jokers) {
     return "one pair";
   } else {
     return "high card";
