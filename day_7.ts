@@ -59,22 +59,23 @@ function parseInput(): HandAndBid[] {
 }
 
 function getHandType(hand: string, jokersWild: boolean): HandType {
+  if (hand == "JJJJJ") {
+    return "five of a kind";
+  }
+
   const counts: { [card: string]: number } = {};
   for (const card of hand) {
     counts[card] = counts[card] ? counts[card] + 1 : 1;
   }
 
-  let values = [];
   let jokers = 0;
   if (jokersWild) {
     jokers = counts.J ?? 0;
     delete counts.J;
   }
 
-  values = Object.values(counts).toSorted().toReversed();
+  const values = Object.values(counts).toSorted().toReversed();
 
-  // I want to use a switch/case, but can't compare against arrays like [5], [2, 3], etc,
-  // because javascript does equality checking by reference instead of value.
   if (values[0] + jokers == 5) {
     return "five of a kind";
   } else if (values[0] + jokers == 4) {
@@ -83,9 +84,9 @@ function getHandType(hand: string, jokersWild: boolean): HandType {
     return "full house";
   } else if (values[0] + jokers == 3) {
     return "three of a kind";
-  } else if (values[0] == 2 && (jokers || values[1] == 2)) {
+  } else if (values[0] == 2 && (jokers > 0 || values[1] == 2)) {
     return "two pair";
-  } else if (values[0] == 2 || jokers) {
+  } else if (values[0] == 2 || jokers > 0) {
     return "one pair";
   } else {
     return "high card";
@@ -98,7 +99,7 @@ function compareHands(a: string, b: string, jokersWild: boolean): number {
 
   if (aRank < bRank) {
     return 1;
-  } else if (bRank < aRank) {
+  } else if (aRank > bRank) {
     return -1;
   } else {
     for (let i = 0; i < a.length; i++) {
