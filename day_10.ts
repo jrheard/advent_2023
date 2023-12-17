@@ -1,3 +1,5 @@
+import { parseInts } from "./util.ts";
+
 type Input = string[];
 type Position = [number, number];
 
@@ -108,6 +110,22 @@ function partOne(): number {
   return loop.length / 2;
 }
 
+function isTileEnclosedByLoop(
+  tile: Position,
+  input: Input,
+  loop: readonly Position[],
+): boolean {
+  return true;
+}
+
+function findContiguousNonLoopTiles(
+  startTile: Position,
+  input: Input,
+  loop: readonly Position[],
+): readonly Position[] {
+  return [];
+}
+
 function partTwo(): number {
   const input = parseInput();
   const loop = discoverLoop(input);
@@ -122,7 +140,25 @@ function partTwo(): number {
     tilesToExamine.delete(tile.toString());
   }
 
-  return -1;
+  let result = 0;
+
+  while (true) {
+    const tilesToExamineArray = Array.from(tilesToExamine);
+    if (tilesToExamineArray.length == 0) {
+      return result;
+    }
+
+    const tile = parseInts(tilesToExamineArray.pop()!.split(",")) as Position;
+    const group = findContiguousNonLoopTiles(tile, input, loop);
+
+    if (isTileEnclosedByLoop(tile, input, loop)) {
+      result += group.length;
+    }
+
+    for (const tile of group) {
+      tilesToExamine.delete(tile.toString());
+    }
+  }
 }
 
 console.log(partOne());
