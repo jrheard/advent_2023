@@ -569,3 +569,72 @@ and then, while there are still tiles left in tilesToExamine
     discover whether it's possible to leave the loop from that tile
     discover whether all of that tile's contiguous non-loop neighbors
     use those two pieces of information somehow
+
+man this is interesting
+the squeezing between pipes thing
+
+i think we'll need to have a notion of, like, a Passage between pipes
+that's a series of [Position, Position] tuples
+
+hm
+should i first do a pass on the whole grid to detect passages?
+
+man this is kind of a pain in the ass actually
+
+hm
+not sure about that passage idea
+look att his for instance
+
+L--JOL
+OOOOF-
+
+the O node is connected to the big group to its southwest
+through the gap between the J on its left and the F below it
+so that's like a diagonal
+hm
+
+and to expand that a bit, this one
+
+O|F--7
+O||OFJ
+FJL7L7
+L--JOL
+OOOOF-
+
+the O node on the second line
+is connected to the one on the fourth line
+this question is fucked up man
+
+ok i think this is the way that this has to work
+once you've identified the loop
+do another pass over the whole input to expand it out by 2x in both width and height
+and expand the loop so that it covers the relevant new spots but doesn't cover the unrelevant new ones
+
+maybe the 2x wording isn't quite right
+instead it should be like
+for any two spots on the original grid,
+add a new spot that's either empty (and marked with an F or something for fake) or is part of the loop
+
+so if it was like this
+
+.F-7.
+||L|.
+.L-|.
+
+now it's like this
+
+. F---7 .
+  |   |
+| | L | .
+  |   |
+. L---| .
+
+something like that
+and then do a flood fill of some kind on the newly expanded grid
+
+things to figure out:
+* how to automatically expand the loop to cover the relevant new spots
+* how to demarcate the new fake empty spots
+* how to translate back from the expanded grid to the original grid
+
+i think this could work

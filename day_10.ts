@@ -110,20 +110,47 @@ function partOne(): number {
   return loop.length / 2;
 }
 
-function isTileEnclosedByLoop(
-  tile: Position,
+function findNeighborsForGrouping(
+  [x, y]: Position,
   input: Input,
   loop: readonly Position[],
-): boolean {
-  return true;
+): readonly Position[] {
+  // TODO deal with squeezing through pipes
+  return [];
 }
 
 function findContiguousNonLoopTiles(
   startTile: Position,
   input: Input,
   loop: readonly Position[],
-): readonly Position[] {
-  return [];
+): [readonly Position[], boolean] {
+  const group: Set<Position> = new Set();
+  let groupIsEnclosed = true;
+
+  const tilesToProcess = [startTile];
+  while (tilesToProcess.length > 0) {
+    const tile = tilesToProcess.pop()!;
+    group.add(tile);
+
+    for (const neighbor of findNeighborsForGrouping(tile, input, loop)) {
+      if (
+        !group.has(neighbor) &&
+        (tilesToProcess.find((position) =>
+          position[0] == neighbor[0] && position[1] == neighbor[1]
+        ) == undefined)
+      ) {
+        tilesToProcess.push(neighbor);
+      }
+
+      if (
+        neighbor[0] == 0 || neighbor[1] == 0 ||
+        neighbor[0] == input[0].length - 1 || neighbor[1] == input.length - 1
+      ) {
+        groupIsEnclosed = false;
+      }
+    }
+  }
+  return [Array.from(group), groupIsEnclosed];
 }
 
 function partTwo(): number {
@@ -149,9 +176,9 @@ function partTwo(): number {
     }
 
     const tile = parseInts(tilesToExamineArray.pop()!.split(",")) as Position;
-    const group = findContiguousNonLoopTiles(tile, input, loop);
+    const [group, isEnclosed] = findContiguousNonLoopTiles(tile, input, loop);
 
-    if (isTileEnclosedByLoop(tile, input, loop)) {
+    if (isEnclosed) {
       result += group.length;
     }
 
