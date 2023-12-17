@@ -21,8 +21,6 @@ function nextValueInSequence(sequence: readonly number[]): number {
   const sequenceStack = [];
 
   while (true) {
-    // TODO when can currentSequence.length be 0?
-    // TODO figure out which inputs can cause that to happen and see if it should be handled differently
     if (isAllZeroes(currentSequence)) {
       let currentEndValue = 0;
 
@@ -34,7 +32,6 @@ function nextValueInSequence(sequence: readonly number[]): number {
       return currentEndValue;
     } else {
       sequenceStack.push(currentSequence);
-      console.log(`pushed ${currentSequence}`);
       currentSequence = differences(currentSequence);
     }
   }

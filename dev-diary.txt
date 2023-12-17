@@ -532,3 +532,10 @@ so each start node seems to arrive at its end node on a loop
 
 cool so this is easier then
 
+ok back to it
+working on day 9 part 1
+i had started on this last time but it was getting wrong answer
+let's take a look
+
+looks like it gets the right answer on the example input but fails on the real input
+nvm i just had a typo in the real input
