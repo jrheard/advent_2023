@@ -105,9 +105,8 @@ function discoverLoop(input: Input): readonly Position[] {
 function partOne(): number {
   const input = parseInput();
 
-  console.log(discoverLoop(input));
-
-  return -1;
+  const loop = discoverLoop(input);
+  return loop.length / 2;
 }
 
 function partTwo(): number {
