@@ -104,12 +104,24 @@ function discoverLoop(input: Input): readonly Position[] {
 
 function partOne(): number {
   const input = parseInput();
-
   const loop = discoverLoop(input);
   return loop.length / 2;
 }
 
 function partTwo(): number {
+  const input = parseInput();
+  const loop = discoverLoop(input);
+
+  const tilesToExamine = new Set(
+    input.flatMap((row, y) =>
+      Array.from(row).map((_v, x) => [x, y].toString())
+    ),
+  );
+
+  for (const tile of loop) {
+    tilesToExamine.delete(tile.toString());
+  }
+
   return -1;
 }
 

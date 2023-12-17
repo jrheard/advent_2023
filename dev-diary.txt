@@ -554,3 +554,18 @@ and then i figure out which position is farthest from the start (the one halfway
 
 ok making good progress so far, findConnectedTiles fn done
 now let's write discoverLoop
+done, ez, fun
+
+10 part 2 is interesting
+the bit about squeezing through pipes is particularly interesting
+tempted to write a flood fill
+but where does the flood fill start?
+
+i guess it's like
+first you assemble the set of all positions in the input, call it tilesToExamine
+and then you subtract the loop from that set
+and then, while there are still tiles left in tilesToExamine
+    pop a tile from the set
+    discover whether it's possible to leave the loop from that tile
+    discover whether all of that tile's contiguous non-loop neighbors
+    use those two pieces of information somehow
