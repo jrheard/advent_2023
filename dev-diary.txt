@@ -539,3 +539,15 @@ let's take a look
 
 looks like it gets the right answer on the example input but fails on the real input
 nvm i just had a typo in the real input
+
+ok part 2 ez
+
+day 10 part 1 now
+this one looks interesting / fun
+
+seems like i'll want a function that takes a tile position as input and returns the positions of the tiles that are connected to it
+and then i essentially just run that function over and over until it's solely returning already-seen tiles
+and along the way i accumulate a set of positions and those positions are the loop (gotta track this in an array as opposed to a set)
+    (although i'll prob use a set too)
+
+and then i figure out which position is farthest from the start (the one halfway through the array i bet)
