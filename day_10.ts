@@ -17,7 +17,7 @@ function findPositionOfStartTile(input: Input): Position {
 function findConnectedTiles(
   input: Input,
   [x, y]: Position,
-): readonly Position[] {
+): Position[] {
   const value = input[y][x];
   const result: Position[] = [];
 
@@ -67,15 +67,46 @@ function findConnectedTiles(
     case ".": {
       throw new Error("ground tile");
     }
+    default: {
+      throw new Error(`unexpected value ${value} at ${[x, y]}`);
+    }
   }
+}
+
+function discoverLoop(input: Input): readonly Position[] {
+  const startTile = findPositionOfStartTile(input);
+
+  const result: Position[] = [startTile];
+
+  // Intentionally only use one of the connected tiles so that we discover the loop in one direction
+  // instead of discovering it in both directions at once (makes assembling an ordered `result` easier).
+  const tilesToProcess = [findConnectedTiles(input, startTile)[0]];
+
+  const seenTiles = new Set([
+    startTile.toString(),
+    tilesToProcess[0].toString(),
+  ]);
+
+  while (tilesToProcess.length > 0) {
+    const tile = tilesToProcess.pop()!;
+    result.push(tile);
+
+    for (const neighbor of findConnectedTiles(input, tile)) {
+      if (!seenTiles.has(neighbor.toString())) {
+        tilesToProcess.push(neighbor);
+        seenTiles.add(neighbor.toString());
+      }
+    }
+  }
+
+  return result;
 }
 
 function partOne(): number {
   const input = parseInput();
 
-  const startTile = findPositionOfStartTile(input);
-  console.log(startTile);
-  console.log(findConnectedTiles(input, startTile));
+  console.log(discoverLoop(input));
+
   return -1;
 }
 

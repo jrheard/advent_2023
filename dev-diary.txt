@@ -551,3 +551,6 @@ and along the way i accumulate a set of positions and those positions are the lo
     (although i'll prob use a set too)
 
 and then i figure out which position is farthest from the start (the one halfway through the array i bet)
+
+ok making good progress so far, findConnectedTiles fn done
+now let's write discoverLoop
