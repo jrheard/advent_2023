@@ -123,14 +123,12 @@ function findNeighborsForGrouping(
 ): readonly Position[] {
   const result: Position[] = [];
 
-  for (let xx = x - 1; xx <= x + 1; xx++) {
-    for (let yy = y - 1; yy <= y + 1; yy++) {
-      if (
-        xx >= 0 && xx < grid[0].length && yy >= 0 && yy < grid.length &&
-        (xx != x || yy != y) && grid[yy][xx] != LOOP_MARKER_CHAR
-      ) {
-        result.push([xx, yy]);
-      }
+  for (const [xx, yy] of [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]]) {
+    if (
+      xx >= 0 && xx < grid[0].length && yy >= 0 && yy < grid.length &&
+      grid[yy][xx] != LOOP_MARKER_CHAR
+    ) {
+      result.push([xx, yy]);
     }
   }
 
@@ -141,17 +139,18 @@ function findContiguousNonLoopTiles(
   startTile: Position,
   grid: Grid,
 ): [readonly Position[], boolean] {
-  const group: Set<Position> = new Set();
+  const group: Set<string> = new Set();
   let groupIsEnclosed = true;
 
   const tilesToProcess = [startTile];
+
   while (tilesToProcess.length > 0) {
     const tile = tilesToProcess.pop()!;
-    group.add(tile);
+    group.add(tile.toString());
 
     for (const neighbor of findNeighborsForGrouping(tile, grid)) {
       if (
-        !group.has(neighbor) &&
+        !group.has(neighbor.toString()) &&
         (tilesToProcess.find((position) =>
           position[0] == neighbor[0] && position[1] == neighbor[1]
         ) == undefined)
@@ -167,7 +166,13 @@ function findContiguousNonLoopTiles(
       }
     }
   }
-  return [Array.from(group), groupIsEnclosed];
+
+  return [
+    Array.from(group).map((position) =>
+      parseInts(position.split(",")) as Position
+    ),
+    groupIsEnclosed,
+  ];
 }
 
 // Takes the input grid and expands it to be 2x its original width and height.
@@ -266,7 +271,7 @@ function partTwo(): number {
 
   const groups: [readonly Position[], boolean][] = [];
 
-  // Do a series of flood fills to discover which groups of '.' tiles are contained by the loop.
+  // Do a series of flood fills to discover which groups of non-loop tiles are contained by the loop.
   while (true) {
     const tilesToExamineArray = Array.from(tilesToExamine);
     if (tilesToExamineArray.length == 0) {
@@ -275,7 +280,7 @@ function partTwo(): number {
 
     const tile = parseInts(tilesToExamineArray.pop()!.split(",")) as Position;
 
-    const [group, isEnclosed] = findContiguousNonLoopTiles(tile, grid);
+    const [group, isEnclosed] = findContiguousNonLoopTiles(tile, expandedGrid);
     groups.push([group, isEnclosed]);
 
     for (const tile of group) {
