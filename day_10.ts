@@ -166,7 +166,7 @@ function findContiguousNonLoopTiles(
 // with a '.' character.
 function expandGrid(input: Input, loop: readonly Position[]): Input {
   // Step 1: Expand the input grid by 2x in width+height.
-  const rawExpandedGrid = input.flatMap((line) => [
+  const result = input.flatMap((line) => [
     Array.from(line).map((char) => char + " ").join(""),
     " ".repeat(line.length * 2),
   ]);
@@ -215,33 +215,35 @@ function expandGrid(input: Input, loop: readonly Position[]): Input {
     positionsToReplace.push([x, y]);
 
     for (const [xx, yy] of positionsToReplace) {
-      rawExpandedGrid[yy] = replaceCharacterAt(
-        input[yy * 2],
+      result[yy * 2] = replaceCharacterAt(
+        result[yy * 2],
         xx * 2,
         LOOP_MARKER_CHAR,
       );
     }
   }
 
-  /*
-  | is a vertical pipe connecting north and south.
-- is a horizontal pipe connecting east and west.
-L is a 90-degree bend connecting north and east.
-J is a 90-degree bend connecting north and west.
-7 is a 90-degree bend connecting south and west.
-F is a 90-degree bend connecting south and east.
-. is ground; there is no pipe in this tile.
-S is the starting position of the animal; there is a pipe on this tile, but your sketch doesn't show what shape the pipe has.
+  // Step 3: replace all preexisting non-loop tiles with a '.' character.
+  for (const [i, line] of result.entries()) {
+    if (i % 2 == 0) {
+      result[i] = line.replaceAll(/\||-|L|J|7|F/g, ".");
+    }
+  }
 
-
-  */
-
-  return input;
+  return result;
 }
 
 function partTwo(): number {
   const input = parseInput();
   const loop = discoverLoop(input);
+
+  const expandedGrid = expandGrid(input, loop);
+  for (const line of expandedGrid) {
+    console.log(line);
+  }
+
+  //
+  return -1;
 
   const tilesToExamine = new Set(
     input.flatMap((row, y) =>
