@@ -281,12 +281,10 @@ function partTwo(): number {
     }
   }
 
-  console.log(groups);
-
-  // TODO filter for only groups where isEnclosed=true
-  // TODO count the number of coordinates in each group whose x and y are both divisible by 2
-
-  return -1;
+  return groups.filter(([group, isEnclosed]) => isEnclosed).reduce((
+    acc,
+    [group, _],
+  ) => acc + group.filter(([x, y]) => x % 2 == 0 && y % 2 == 0).length, 0);
 }
 
 console.log(partOne());
