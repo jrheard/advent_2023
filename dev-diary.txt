@@ -636,5 +636,6 @@ things to figure out:
 * how to automatically expand the loop to cover the relevant new spots
 * how to demarcate the new fake empty spots
 * how to translate back from the expanded grid to the original grid
+    if x and y coordinates % 2 == 0, it's an original spot, right?
 
 i think this could work

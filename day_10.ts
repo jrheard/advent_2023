@@ -1,5 +1,12 @@
 import { parseInts } from "./util.ts";
 
+const LOOP_MARKER_CHAR = "☃";
+
+function replaceCharacterAt(str: string, index: number, replacement: string) {
+  return str.substring(0, index) + replacement +
+    str.substring(index + replacement.length);
+}
+
 type Input = string[];
 type Position = [number, number];
 
@@ -151,6 +158,85 @@ function findContiguousNonLoopTiles(
     }
   }
   return [Array.from(group), groupIsEnclosed];
+}
+
+// Takes the input grid and expands it to be 2x its original width and height.
+// Expands the `loop` to cover the relevant new tiles, but otherwise leaves the new tiles
+// as ' ' characters. Replaces loop tiles with a '☃' character, replaces preexisting non-loop tiles
+// with a '.' character.
+function expandGrid(input: Input, loop: readonly Position[]): Input {
+  // Step 1: Expand the input grid by 2x in width+height.
+  const rawExpandedGrid = input.flatMap((line) => [
+    Array.from(line).map((char) => char + " ").join(""),
+    " ".repeat(line.length * 2),
+  ]);
+
+  // Step 2: Expand the loop so that it covers the relevant newly-inserted tiles.
+  for (const [x, y] of loop) {
+    let positionsToReplace: Position[] = [];
+
+    switch (input[y][x]) {
+      case "|": {
+        positionsToReplace = [[x, y - 1], [x, y + 1]];
+        break;
+      }
+      case "-": {
+        positionsToReplace = [[x - 1, y], [x + 1, y]];
+        break;
+      }
+      case "L": {
+        positionsToReplace = [[x, y - 1], [x + 1, y]];
+        break;
+      }
+      case "J": {
+        positionsToReplace = [[x - 1, y], [x, y - 1]];
+        break;
+      }
+      case "7": {
+        positionsToReplace = [[x - 1, y], [x, y + 1]];
+        break;
+      }
+      case "F": {
+        positionsToReplace = [[x + 1, y], [x, y + 1]];
+        break;
+      }
+      case "S": {
+        // The S tile's [x, y] will automatically be replaced right after this switch statement,
+        // and the tiles that it's connected to will have their new extensions handled
+        // by this switch statement, so we don't need to e.g. carefully detect what shape
+        // S should have been and handle its newly-connected tiles manually.
+        break;
+      }
+      default: {
+        throw new Error(`unexpected value ${input[y][x]} at ${x}, ${y}`);
+      }
+    }
+
+    positionsToReplace.push([x, y]);
+
+    for (const [xx, yy] of positionsToReplace) {
+      rawExpandedGrid[yy] = replaceCharacterAt(
+        input[yy * 2],
+        xx * 2,
+        LOOP_MARKER_CHAR,
+      );
+    }
+  }
+
+  /*
+  | is a vertical pipe connecting north and south.
+- is a horizontal pipe connecting east and west.
+L is a 90-degree bend connecting north and east.
+J is a 90-degree bend connecting north and west.
+7 is a 90-degree bend connecting south and west.
+F is a 90-degree bend connecting south and east.
+. is ground; there is no pipe in this tile.
+S is the starting position of the animal; there is a pipe on this tile, but your sketch doesn't show what shape the pipe has.
+
+
+  */
+
+  return input;
 }
 
 function partTwo(): number {
