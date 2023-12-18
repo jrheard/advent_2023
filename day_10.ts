@@ -7,15 +7,15 @@ function replaceCharacterAt(str: string, index: number, replacement: string) {
     str.substring(index + replacement.length);
 }
 
-type Input = string[];
+type Grid = string[];
 type Position = [number, number];
 
-function parseInput(): Input {
+function parseInput(): Grid {
   return Deno.readTextFileSync("inputs/day_10.txt").split("\n");
 }
 
-function findPositionOfStartTile(input: Input): Position {
-  for (const [y, row] of input.entries()) {
+function findPositionOfStartTile(grid: Grid): Position {
+  for (const [y, row] of grid.entries()) {
     if (row.includes("S")) {
       return [row.indexOf("S"), y];
     }
@@ -24,27 +24,27 @@ function findPositionOfStartTile(input: Input): Position {
 }
 
 function findConnectedTiles(
-  input: Input,
+  grid: Grid,
   [x, y]: Position,
 ): Position[] {
-  const value = input[y][x];
+  const value = grid[y][x];
   const result: Position[] = [];
 
   if (value == "S") {
     // North
-    if (y > 0 && ["|", "7", "F"].includes(input[y - 1][x])) {
+    if (y > 0 && ["|", "7", "F"].includes(grid[y - 1][x])) {
       result.push([x, y - 1]);
     }
     // East
-    if (x < input[0].length - 1 && ["7", "-", "J"].includes(input[y][x + 1])) {
+    if (x < grid[0].length - 1 && ["7", "-", "J"].includes(grid[y][x + 1])) {
       result.push([x + 1, y]);
     }
     // South
-    if (y < input.length - 1 && ["|", "J", "L"].includes(input[y + 1][x])) {
+    if (y < grid.length - 1 && ["|", "J", "L"].includes(grid[y + 1][x])) {
       result.push([x, y + 1]);
     }
     // West
-    if (x > 0 && ["-", "F", "L"].includes(input[y][x - 1])) {
+    if (x > 0 && ["-", "F", "L"].includes(grid[y][x - 1])) {
       result.push([x - 1, y]);
     }
 
@@ -82,14 +82,14 @@ function findConnectedTiles(
   }
 }
 
-function discoverLoop(input: Input): readonly Position[] {
-  const startTile = findPositionOfStartTile(input);
+function discoverLoop(grid: Grid): readonly Position[] {
+  const startTile = findPositionOfStartTile(grid);
 
   const result: Position[] = [startTile];
 
   // Intentionally only use one of the connected tiles so that we discover the loop in one direction
   // instead of discovering it in both directions at once (makes assembling an ordered `result` easier).
-  const tilesToProcess = [findConnectedTiles(input, startTile)[0]];
+  const tilesToProcess = [findConnectedTiles(grid, startTile)[0]];
 
   const seenTiles = new Set([
     startTile.toString(),
@@ -100,7 +100,7 @@ function discoverLoop(input: Input): readonly Position[] {
     const tile = tilesToProcess.pop()!;
     result.push(tile);
 
-    for (const neighbor of findConnectedTiles(input, tile)) {
+    for (const neighbor of findConnectedTiles(grid, tile)) {
       if (!seenTiles.has(neighbor.toString())) {
         tilesToProcess.push(neighbor);
         seenTiles.add(neighbor.toString());
@@ -112,24 +112,34 @@ function discoverLoop(input: Input): readonly Position[] {
 }
 
 function partOne(): number {
-  const input = parseInput();
-  const loop = discoverLoop(input);
+  const grid = parseInput();
+  const loop = discoverLoop(grid);
   return loop.length / 2;
 }
 
 function findNeighborsForGrouping(
   [x, y]: Position,
-  input: Input,
-  loop: readonly Position[],
+  grid: Grid,
 ): readonly Position[] {
-  // TODO deal with squeezing through pipes
-  return [];
+  const result: Position[] = [];
+
+  for (let xx = x - 1; xx <= x + 1; xx++) {
+    for (let yy = y - 1; yy <= y + 1; yy++) {
+      if (
+        xx >= 0 && xx < grid[0].length && yy >= 0 && yy < grid.length &&
+        (xx != x || yy != y) && grid[yy][xx] != LOOP_MARKER_CHAR
+      ) {
+        result.push([xx, yy]);
+      }
+    }
+  }
+
+  return result;
 }
 
 function findContiguousNonLoopTiles(
   startTile: Position,
-  input: Input,
-  loop: readonly Position[],
+  grid: Grid,
 ): [readonly Position[], boolean] {
   const group: Set<Position> = new Set();
   let groupIsEnclosed = true;
@@ -139,7 +149,7 @@ function findContiguousNonLoopTiles(
     const tile = tilesToProcess.pop()!;
     group.add(tile);
 
-    for (const neighbor of findNeighborsForGrouping(tile, input, loop)) {
+    for (const neighbor of findNeighborsForGrouping(tile, grid)) {
       if (
         !group.has(neighbor) &&
         (tilesToProcess.find((position) =>
@@ -151,7 +161,7 @@ function findContiguousNonLoopTiles(
 
       if (
         neighbor[0] == 0 || neighbor[1] == 0 ||
-        neighbor[0] == input[0].length - 1 || neighbor[1] == input.length - 1
+        neighbor[0] == grid[0].length - 1 || neighbor[1] == grid.length - 1
       ) {
         groupIsEnclosed = false;
       }
@@ -164,9 +174,9 @@ function findContiguousNonLoopTiles(
 // Expands the `loop` to cover the relevant new tiles, but otherwise leaves the new tiles
 // as ' ' characters. Replaces loop tiles with a '☃' character, replaces preexisting non-loop tiles
 // with a '.' character.
-function expandGrid(input: Input, loop: readonly Position[]): Input {
+function expandGrid(grid: Grid, loop: readonly Position[]): Grid {
   // Step 1: Expand the input grid by 2x in width+height.
-  const result = input.flatMap((line) => [
+  const result = grid.flatMap((line) => [
     Array.from(line).map((char) => char + " ").join(""),
     " ".repeat(line.length * 2),
   ]);
@@ -175,7 +185,7 @@ function expandGrid(input: Input, loop: readonly Position[]): Input {
   for (const [x, y] of loop) {
     let positionsToReplace: Position[] = [];
 
-    switch (input[y][x]) {
+    switch (grid[y][x]) {
       case "|": {
         positionsToReplace = [[x * 2, y * 2 - 1], [x * 2, y * 2 + 1]];
         break;
@@ -208,7 +218,7 @@ function expandGrid(input: Input, loop: readonly Position[]): Input {
         break;
       }
       default: {
-        throw new Error(`unexpected value ${input[y][x]} at ${x}, ${y}`);
+        throw new Error(`unexpected value ${grid[y][x]} at ${x}, ${y}`);
       }
     }
 
@@ -234,46 +244,51 @@ function expandGrid(input: Input, loop: readonly Position[]): Input {
 }
 
 function partTwo(): number {
-  const input = parseInput();
-  const loop = discoverLoop(input);
+  const grid = parseInput();
+  const loop = discoverLoop(grid);
 
-  const expandedGrid = expandGrid(input, loop);
+  const expandedGrid = expandGrid(grid, loop);
+  /*
   for (const line of expandedGrid) {
     console.log(line);
   }
+  */
 
-  //
-  return -1;
-
+  // Find the positions of all of the '.' tiles in the expanded grid.
   const tilesToExamine = new Set(
-    input.flatMap((row, y) =>
-      Array.from(row).map((_v, x) => [x, y].toString())
+    expandedGrid.flatMap((row, y) =>
+      Array.from(row).map((v, x) => [v, x]).filter(([v, _x]) => v == ".").map((
+        _v,
+        x,
+      ) => [x, y].toString())
     ),
   );
 
-  for (const tile of loop) {
-    tilesToExamine.delete(tile.toString());
-  }
+  const groups: [readonly Position[], boolean][] = [];
 
-  let result = 0;
-
+  // Do a series of flood fills to discover which groups of '.' tiles are contained by the loop.
   while (true) {
     const tilesToExamineArray = Array.from(tilesToExamine);
     if (tilesToExamineArray.length == 0) {
-      return result;
+      break;
     }
 
     const tile = parseInts(tilesToExamineArray.pop()!.split(",")) as Position;
-    const [group, isEnclosed] = findContiguousNonLoopTiles(tile, input, loop);
 
-    if (isEnclosed) {
-      result += group.length;
-    }
+    const [group, isEnclosed] = findContiguousNonLoopTiles(tile, grid);
+    groups.push([group, isEnclosed]);
 
     for (const tile of group) {
       tilesToExamine.delete(tile.toString());
     }
   }
+
+  console.log(groups);
+
+  // TODO filter for only groups where isEnclosed=true
+  // TODO count the number of coordinates in each group whose x and y are both divisible by 2
+
+  return -1;
 }
 
 console.log(partOne());
