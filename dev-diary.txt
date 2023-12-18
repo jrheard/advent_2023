@@ -872,3 +872,10 @@ fixing that seems to give better results!
   ]
 ]
 -1
+
+ok i did it! all done with 10b!!!!
+
+let's take a break from aoc for rest of day
+and read some docs!
+
+https://www.typescriptlang.org/docs/handbook/2/modules.html

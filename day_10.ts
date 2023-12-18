@@ -144,9 +144,7 @@ function findContiguousNonLoopTiles(
       const neighbor: Position = [x, y];
       if (
         !group.has(neighbor.toString()) &&
-        (tilesToProcess.find((position) =>
-          position[0] == x && position[1] == y
-        ) == undefined)
+        (tilesToProcess.find(([xx, yy]) => xx == x && yy == y) == undefined)
       ) {
         tilesToProcess.push(neighbor);
       }
@@ -233,9 +231,7 @@ function expandGrid(grid: Grid, loop: readonly Position[]): Grid {
 
   // Step 3: replace all preexisting non-loop tiles with a '.' character.
   for (const [i, line] of result.entries()) {
-    if (i % 2 == 0) {
-      result[i] = line.replaceAll(/\||-|L|J|7|F/g, ".");
-    }
+    result[i] = line.replaceAll(/\||-|L|J|7|F/g, ".");
   }
 
   return result;
