@@ -639,3 +639,52 @@ things to figure out:
     if x and y coordinates % 2 == 0, it's an original spot, right?
 
 i think this could work
+
+ok cool, i wrote an expandgrid function
+did it work?
+
+when given this input:
+
+7-F7-
+.FJ|7
+SJLL7
+|F--J
+LJ.LJ
+
+which the prompt says translates to this loop:
+
+..F7.
+.FJ|.
+SJ.L7
+|F--J
+LJ...
+
+i get this output:
+
+. . ☃ ☃ .
+
+. ☃ ☃ ☃ .
+
+☃ ☃ . ☃ ☃
+
+☃ ☃ ☃ ☃ ☃
+
+☃ ☃ . . .
+
+no, i'm not correctly filling in the gaps between spots in the loop
+ez to fix
+
+ok now i get this
+
+. . ☃☃☃ .
+    ☃ ☃
+. ☃☃☃ ☃ .
+  ☃   ☃
+☃☃☃ . ☃☃☃
+☃       ☃
+☃ ☃☃☃☃☃☃☃
+☃ ☃
+☃☃☃ . . .
+
+that looks fucking awesome
+i think this is going to work!!!!

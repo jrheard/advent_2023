@@ -177,27 +177,27 @@ function expandGrid(input: Input, loop: readonly Position[]): Input {
 
     switch (input[y][x]) {
       case "|": {
-        positionsToReplace = [[x, y - 1], [x, y + 1]];
+        positionsToReplace = [[x * 2, y * 2 - 1], [x * 2, y * 2 + 1]];
         break;
       }
       case "-": {
-        positionsToReplace = [[x - 1, y], [x + 1, y]];
+        positionsToReplace = [[x * 2 - 1, y * 2], [x * 2 + 1, y * 2]];
         break;
       }
       case "L": {
-        positionsToReplace = [[x, y - 1], [x + 1, y]];
+        positionsToReplace = [[x * 2, y * 2 - 1], [x * 2 + 1, y * 2]];
         break;
       }
       case "J": {
-        positionsToReplace = [[x - 1, y], [x, y - 1]];
+        positionsToReplace = [[x * 2 - 1, y * 2], [x * 2, y * 2 - 1]];
         break;
       }
       case "7": {
-        positionsToReplace = [[x - 1, y], [x, y + 1]];
+        positionsToReplace = [[x * 2 - 1, y * 2], [x * 2, y * 2 + 1]];
         break;
       }
       case "F": {
-        positionsToReplace = [[x + 1, y], [x, y + 1]];
+        positionsToReplace = [[x * 2 + 1, y * 2], [x * 2, y * 2 + 1]];
         break;
       }
       case "S": {
@@ -212,12 +212,12 @@ function expandGrid(input: Input, loop: readonly Position[]): Input {
       }
     }
 
-    positionsToReplace.push([x, y]);
+    positionsToReplace.push([x * 2, y * 2]);
 
     for (const [xx, yy] of positionsToReplace) {
-      result[yy * 2] = replaceCharacterAt(
-        result[yy * 2],
-        xx * 2,
+      result[yy] = replaceCharacterAt(
+        result[yy],
+        xx,
         LOOP_MARKER_CHAR,
       );
     }
