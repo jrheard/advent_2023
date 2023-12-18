@@ -121,18 +121,10 @@ function findNeighborsForGrouping(
   [x, y]: Position,
   grid: Grid,
 ): readonly Position[] {
-  const result: Position[] = [];
-
-  for (const [xx, yy] of [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]]) {
-    if (
-      xx >= 0 && xx < grid[0].length && yy >= 0 && yy < grid.length &&
-      grid[yy][xx] != LOOP_MARKER_CHAR
-    ) {
-      result.push([xx, yy]);
-    }
-  }
-
-  return result;
+  return [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]].filter(([xx, yy]) =>
+    xx >= 0 && xx < grid[0].length && yy >= 0 && yy < grid.length &&
+    grid[yy][xx] != LOOP_MARKER_CHAR
+  ) as Position[];
 }
 
 function findContiguousNonLoopTiles(
@@ -148,19 +140,20 @@ function findContiguousNonLoopTiles(
     const tile = tilesToProcess.pop()!;
     group.add(tile.toString());
 
-    for (const neighbor of findNeighborsForGrouping(tile, grid)) {
+    for (const [x, y] of findNeighborsForGrouping(tile, grid)) {
+      const neighbor: Position = [x, y];
       if (
         !group.has(neighbor.toString()) &&
         (tilesToProcess.find((position) =>
-          position[0] == neighbor[0] && position[1] == neighbor[1]
+          position[0] == x && position[1] == y
         ) == undefined)
       ) {
         tilesToProcess.push(neighbor);
       }
 
       if (
-        neighbor[0] == 0 || neighbor[1] == 0 ||
-        neighbor[0] == grid[0].length - 1 || neighbor[1] == grid.length - 1
+        x == 0 || y == 0 ||
+        x == grid[0].length - 1 || y == grid.length - 1
       ) {
         groupIsEnclosed = false;
       }
@@ -260,14 +253,14 @@ function partTwo(): number {
   */
 
   // Find the positions of all of the '.' tiles in the expanded grid.
-  const tilesToExamine = new Set(
-    expandedGrid.flatMap((row, y) =>
-      Array.from(row).map((v, x) => [v, x]).filter(([v, _x]) => v == ".").map((
-        _v,
-        x,
-      ) => [x, y].toString())
-    ),
-  );
+  const tilesToExamine = new Set<string>();
+  for (const [y, row] of expandedGrid.entries()) {
+    for (const [x, char] of Array.from(row).entries()) {
+      if (char == ".") {
+        tilesToExamine.add([x, y].toString());
+      }
+    }
+  }
 
   const groups: [readonly Position[], boolean][] = [];
 
