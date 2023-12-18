@@ -246,11 +246,6 @@ function partTwo(): number {
   const loop = discoverLoop(grid);
 
   const expandedGrid = expandGrid(grid, loop);
-  /*
-  for (const line of expandedGrid) {
-    console.log(line);
-  }
-  */
 
   // Find the positions of all of the '.' tiles in the expanded grid.
   const tilesToExamine = new Set<string>();
@@ -281,7 +276,9 @@ function partTwo(): number {
     }
   }
 
-  return groups.filter(([group, isEnclosed]) => isEnclosed).reduce((
+  // Return the number of enclosed coordinates whose x and y are both divisible by 2,
+  // which indicates that the coordinate is from the original, non-expanded grid.
+  return groups.filter(([_group, isEnclosed]) => isEnclosed).reduce((
     acc,
     [group, _],
   ) => acc + group.filter(([x, y]) => x % 2 == 0 && y % 2 == 0).length, 0);
