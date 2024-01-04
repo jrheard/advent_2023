@@ -879,3 +879,76 @@ let's take a break from aoc for rest of day
 and read some docs!
 
 https://www.typescriptlang.org/docs/handbook/2/modules.html
+    In TypeScript, just as in ECMAScript 2015, any file containing a top-level
+    import or export is considered a module.
+
+    Conversely, a file without any top-level import or export declarations is
+    treated as a script whose contents are available in the global scope (and
+    therefore to modules as well).
+
+this is neat:
+
+    import * as math from "./maths.js";
+
+    console.log(math.pi);
+
+i like that, although i don't like that if you leave the `as math` off you just import *
+feels like lots of ts devs will just leave the `as math` off :(
+
+import type is interesting
+
+===
+
+ok, was away for a couple weeks for holidays
+where was i?
+
+looks like i finished 10b so it's time to start on 11
+
+how do i program again?
+
+    Due to something involving gravitational effects, only some space expands. In
+    fact, the result is that any rows or columns that contain no galaxies should all
+    actually be twice as big.
+
+sounds like there are a few phases -
+read input
+expand input
+identify positions of galaxies
+compute shortest path between each pair of galaxies
+sum paths
+
+ok, took a pass at loading up the input and expanding it
+
+my expanded input looks like this atm
+
+[
+  "....#........",
+  ".........#...",
+  "#............",
+  ".............",
+  ".............",
+  "........#....",
+  ".#...........",
+  "............#",
+  ".............",
+  ".............",
+  ".........#...",
+  "#....#......."
+]
+
+and it's supposed to look like this
+
+....#........
+.........#...
+#............
+.............
+.............
+........#....
+.#...........
+............#
+.............
+.............
+.........#...
+#....#.......
+
+looks good to me!!
