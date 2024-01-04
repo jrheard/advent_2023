@@ -1,6 +1,10 @@
 import { range } from "./util.ts";
 
-type Grid = readonly string[];
+type Grid = {
+  data: readonly string[];
+  emptyRowIndexes: readonly number[];
+  emptyColumnIndexes: readonly number[];
+};
 type Position = [number, number];
 
 function parseInput(): Grid {
@@ -13,30 +17,18 @@ function parseInput(): Grid {
     originalGrid.every((row) => row[i] == ".")
   );
 
-  const tallerGrid = originalGrid.flatMap((row, index) => {
-    if (emptyRowIndexes.includes(index)) {
-      return [row, row];
-    } else {
-      return [row];
-    }
-  });
-
-  return tallerGrid.map((row) =>
-    row.split("").flatMap((columnValue, columnIndex) => {
-      if (emptyColumnIndexes.includes(columnIndex)) {
-        return [".", "."];
-      } else {
-        return [columnValue];
-      }
-    }).join("")
-  );
+  return {
+    data: originalGrid,
+    emptyRowIndexes,
+    emptyColumnIndexes,
+  };
 }
 
 function findPositionsOfGalaxies(grid: Grid): readonly Position[] {
   const result: Position[] = [];
-  for (const y of range(0, grid.length)) {
-    for (const x of range(0, grid[0].length)) {
-      if (grid[y][x] == "#") {
+  for (const y of range(0, grid.data.length)) {
+    for (const x of range(0, grid.data[0].length)) {
+      if (grid.data[y][x] == "#") {
         result.push([x, y]);
       }
     }
@@ -44,11 +36,13 @@ function findPositionsOfGalaxies(grid: Grid): readonly Position[] {
   return result;
 }
 
-function findPathBetweenGalaxies(
+function findPathLengthBetweenGalaxies(
+  grid: Grid,
   galaxyOne: Position,
   galaxyTwo: Position,
-): Position[] {
-  const path: Position[] = [];
+  emptyLineDistance: number,
+): number {
+  let result = 0;
   let position = galaxyOne;
 
   while (position[0] != galaxyTwo[0] || position[1] != galaxyTwo[1]) {
@@ -63,28 +57,57 @@ function findPathBetweenGalaxies(
     } else {
       position = [x1, y1 - 1];
     }
-    path.push(position);
-  }
 
-  return path;
-}
-
-function partOne(): number {
-  const input = parseInput();
-  const positions = findPositionsOfGalaxies(input);
-
-  const paths = [];
-  for (const [i, positionOne] of positions.entries()) {
-    for (const positionTwo of positions.slice(i + 1)) {
-      paths.push(findPathBetweenGalaxies(positionOne, positionTwo));
+    if (x1 != position[0] && grid.emptyColumnIndexes.includes(position[0])) {
+      result += emptyLineDistance;
+    } else if (
+      y1 != position[1] && grid.emptyRowIndexes.includes(position[1])
+    ) {
+      result += emptyLineDistance;
+    } else {
+      result += 1;
     }
   }
 
-  return paths.reduce((acc, path) => acc + path.length, 0);
+  return result;
+}
+
+function partOne(): number {
+  const grid = parseInput();
+  const positions = findPositionsOfGalaxies(grid);
+
+  let result = 0;
+  for (const [i, positionOne] of positions.entries()) {
+    for (const positionTwo of positions.slice(i + 1)) {
+      result += findPathLengthBetweenGalaxies(
+        grid,
+        positionOne,
+        positionTwo,
+        2,
+      );
+    }
+  }
+
+  return result;
 }
 
 function partTwo(): number {
-  return -1;
+  const grid = parseInput();
+  const positions = findPositionsOfGalaxies(grid);
+
+  let result = 0;
+  for (const [i, positionOne] of positions.entries()) {
+    for (const positionTwo of positions.slice(i + 1)) {
+      result += findPathLengthBetweenGalaxies(
+        grid,
+        positionOne,
+        positionTwo,
+        1_000_000,
+      );
+    }
+  }
+
+  return result;
 }
 
 console.log(partOne());

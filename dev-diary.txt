@@ -952,3 +952,14 @@ and it's supposed to look like this
 #....#.......
 
 looks good to me!!
+
+ok, finished day 11 part 1
+part 2 will require a different approach
+
+initial thoughts:
+instead of expanding the grid in-place, we should keep the original grid
+and also store the arrays of emptyRowIndexes, emptyColumnIndexes
+
+and then when it's time to do pathfinding
+a) make the pathfinding fn not return the actual path array but instead a length number
+b) if we're crossing a known-empty row or column, add one million to the path length, otherwise add one
