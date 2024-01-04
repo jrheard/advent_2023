@@ -72,9 +72,15 @@ function findPathBetweenGalaxies(
 function partOne(): number {
   const input = parseInput();
   const positions = findPositionsOfGalaxies(input);
-  console.log(positions);
-  console.log(findPathBetweenGalaxies(positions[0], positions[1]));
-  return -1;
+
+  const paths = [];
+  for (const [i, positionOne] of positions.entries()) {
+    for (const positionTwo of positions.slice(i + 1)) {
+      paths.push(findPathBetweenGalaxies(positionOne, positionTwo));
+    }
+  }
+
+  return paths.reduce((acc, path) => acc + path.length, 0);
 }
 
 function partTwo(): number {
