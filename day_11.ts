@@ -1,6 +1,7 @@
 import { range } from "./util.ts";
 
 type Grid = readonly string[];
+type Position = [number, number];
 
 function parseInput(): Grid {
   const originalGrid = Deno.readTextFileSync("inputs/day_11.txt").split("\n");
@@ -31,20 +32,48 @@ function parseInput(): Grid {
   );
 }
 
-function findPositionsOfGalaxies(grid: Grid): readonly [number, number][] {
-  return grid.flatMap((row, y) =>
-    row.split("").reduce((acc, col, x) => {
-      if (col == "#") {
-        acc.push([x, y]);
+function findPositionsOfGalaxies(grid: Grid): readonly Position[] {
+  const result: Position[] = [];
+  for (const y of range(0, grid.length)) {
+    for (const x of range(0, grid[0].length)) {
+      if (grid[y][x] == "#") {
+        result.push([x, y]);
       }
-      return acc;
-    }, [] as [number, number][])
-  );
+    }
+  }
+  return result;
+}
+
+function findPathBetweenGalaxies(
+  galaxyOne: Position,
+  galaxyTwo: Position,
+): Position[] {
+  const path: Position[] = [];
+  let position = galaxyOne;
+
+  while (position[0] != galaxyTwo[0] || position[1] != galaxyTwo[1]) {
+    const [[x1, y1], [x2, y2]] = [position, galaxyTwo];
+
+    if (x1 < x2) {
+      position = [x1 + 1, y1];
+    } else if (x1 > x2) {
+      position = [x1 - 1, y1];
+    } else if (y1 < y2) {
+      position = [x1, y1 + 1];
+    } else {
+      position = [x1, y1 - 1];
+    }
+    path.push(position);
+  }
+
+  return path;
 }
 
 function partOne(): number {
   const input = parseInput();
-  console.log(findPositionsOfGalaxies(input));
+  const positions = findPositionsOfGalaxies(input);
+  console.log(positions);
+  console.log(findPathBetweenGalaxies(positions[0], positions[1]));
   return -1;
 }
 
