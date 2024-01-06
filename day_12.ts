@@ -17,8 +17,23 @@ function parseInput(): Input {
   });
 }
 
+function countPossibleArrangements(record: ConditionRecord): number {
+  // Start by trimming .s from the left and right of the string because we don't have to consider them.
+  const trimmedData = record.data.replace(/^\.+/, "").replace(/\.+$/, "");
+
+  const chunk = trimmedData.slice(
+    0,
+    Math.max(trimmedData.indexOf("."), trimmedData.length),
+  );
+
+  return -1;
+}
+
 function partOne(): number {
   console.log(parseInput());
+  for (const record of parseInput()) {
+    console.log(countPossibleArrangements(record));
+  }
   return -1;
 }
 

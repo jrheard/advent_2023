@@ -972,3 +972,159 @@ took a bit to understand the prompt but i think i get it now
 
 i don't think i'll be able to start thinking about strategies until i start implementing
 so let's parse the input
+
+ok, parsed it into this
+
+[
+  { data: "???.###", damagedGroupSizes: [ 1, 1, 3 ] },
+  { data: ".??..??...?##.", damagedGroupSizes: [ 1, 1, 3 ] },
+  { data: "?#?#?#?#?#?#?#?", damagedGroupSizes: [ 1, 3, 1, 6 ] },
+  { data: "????.#...#...", damagedGroupSizes: [ 4, 1, 1 ] },
+  { data: "????.######..#####.", damagedGroupSizes: [ 1, 6, 5 ] },
+  { data: "?###????????", damagedGroupSizes: [ 3, 2, 1 ] }
+]
+
+looks good, now what?
+we have these ???s, and we have these number arrays
+hm
+
+first idea:
+two passes:
+    first pass has us identify+place+eliminate the parts of the record that are unambiguous
+        in particular, this looks like: trimming part of the string, and discarding part of the array
+    second pass has us look at what remains and count permutations
+
+ok, so first pass
+how do we identify the parts of the record that are unambiguous?
+a few test inputs worth considering come to mind
+
+    ?#?, [1]
+    ?##?, [2]
+    ?.?, [1,1]
+
+man this is like minesweeper
+
+i'm tempted to start by trimming leading+trailing .s
+bc they don't affect anything
+seems reasonable, let's do that
+
+ok ez
+  const trimmedData = record.data.replace(/^\.+/, "").replace(/\.+$/, "");
+fun w regexes
+
+now then
+what can we say about unambiguous chunks of a record?
+how can we identify them?
+
+a few scattershot thoughts so far
+    start at the left side of the string, examine it in some stacklike way
+    there's some relationship between the length of the currently-under-examination string-stack thing and the number array
+    each contentious chunk is bounded in some way?
+        hm but what about this one
+            ?###???????? 3,2,1
+
+hm
+maybe it's best to keep looking at examples
+and in particular focusing on how we would identify the leftmost unambiguous chunk
+
+    ???.### 1,1,3
+    .??..??...?##. 1,1,3
+    ?#?#?#?#?#?#?#? 1,3,1,6
+    ????.#...#... 4,1,1
+    ????.######..#####. 1,6,5
+    ?###???????? 3,2,1
+
+i feel like there's something important about encountering a .
+also i think there's some merit in this "chunks" terminology i've been using
+so where are we so far
+
+*** our goal is to split the string into chunks, and classify each chunk as ambiguous or unambiguous ***
+    might end up needing a Chunk data type for this
+    ****** note that a Chunk of any kind might span multiple number-array entries!
+        ???.### 1,1,3 - first chunk contains [1,1]
+
+to identify each chunk, start at the left-hand side of the string and scan until we find a .
+but this doesn't always work, eg ?###???????? 3,2,1
+so i guess there are multiple heuristics
+    first heuristic is to scan until we encounter a .
+    and then somehow compare the length of the scanned string with the number array, starting from the left
+        eg ???.### combined with [1,1,3] allows us to prove that the first chunk is unambiguous
+
+    but sometimes we don't encounter a .
+    and instead the chunk spans until the end of the string
+
+    on reflection i think this case isn't that different from if there was a . at the end of the string
+    so basically these are the same
+
+after all, even if the chunk is unambiguous AND has a . , it can still span multiple number array entries
+again these two examples are really useful
+    ???.### 1,1,3
+    ?###???????? 3,2,1
+
+ok cool so to recap once again
+the first thing we do is to identify the smallest possible next chunk to work on
+which we do by scanning from the left-hand side of the string until either the first . or the end of the string
+
+i think this should do the trick
+
+  const chunk = trimmedData.slice(
+    0,
+    Math.max(trimmedData.indexOf("."), trimmedData.length),
+  );
+
+ok so
+now what?
+
+we have the chunk, and we have the number array
+the chunk has a length
+so let's grab numbers from the number array until (non-inclusive) the point where the numbers can't fit in the chunk
+
+hm
+i'm getting nervous about this
+
+bc what if we had an input like this?
+
+?????????.##.## [1, 2, 2]
+
+i'm not sure about this left-hand-side-focused approach
+bc i think it could cause me to be like - well obviously the [1, 2, 2] all fit within the left-hand-side ??s
+when really it's just the [1] that goes in there
+hm
+
+ok so now i'm thinking that we might have to first identify+eliminate the unambiguous chunks
+and THEN identify the ambiguous ones
+
+man this is a tricky problem
+it'll be fun to chew on but i don't think i'm going to make much more progress today
+like for instance this one is interesting
+
+  ?#?#?#?#?#?#?#? 1,3,1,6
+
+the leading ?#? is unambiguous when paired with the leading [1]
+i know that by looking at it, but how can i tell the computer that?
+
+hm
+so far i've been focused on an approach that's centered around looking at the string first and the numbers later
+what if i look at the numbers first?
+
+so in this example
+
+  ?#?#?#?#?#?#?#? 1,3,1,6
+
+i start with the 1
+here are some shapes that could match a 1 unambiguously
+  ?#?
+  ?.
+  #.
+  ?#.
+  .#?
+  #
+  ?
+
+what do they have in common?
+and how can i detect if there is ambiguity?
+
+how about:
+there's ambiguity if there are more than 1 ?s in a row
+bc the 1 could be hiding in either one of them
+so that's kind of interesting, huh
