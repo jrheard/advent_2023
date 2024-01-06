@@ -963,3 +963,12 @@ and also store the arrays of emptyRowIndexes, emptyColumnIndexes
 and then when it's time to do pathfinding
 a) make the pathfinding fn not return the actual path array but instead a length number
 b) if we're crossing a known-empty row or column, add one million to the path length, otherwise add one
+
+ok that worked, all done w day 11 :)
+
+ok day 12 now
+this one's interesting
+took a bit to understand the prompt but i think i get it now
+
+i don't think i'll be able to start thinking about strategies until i start implementing
+so let's parse the input
